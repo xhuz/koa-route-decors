@@ -1,0 +1,30 @@
+{
+  "name": "koa-route-decors",
+  "version": "1.0.0",
+  "description": "koa route decorators",
+  "main": "./dist/index.js",
+  "types": "./types/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xhuz/koa-route-decors.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xhuz/koa-route-decors/issues"
+  },
+  "homepage": "https://github.com/xhuz/koa-route-decors#readme",
+  "devDependencies": {
+    "@types/koa-router": "^7.0.42",
+    "tslint": "^5.20.0",
+    "tslint-config-standard": "^9.0.0",
+    "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "koa-router": "^7.4.0"
+  }
+}
