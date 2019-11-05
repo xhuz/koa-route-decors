@@ -4,7 +4,7 @@ export interface ControllerDesc {
   url: string;
   method: RequestMethod;
   handle: () => Promise<any>;
-  constructor: Function;
+  constructor: Constructor;
 }
 export interface Constructor {
   new (): any;
