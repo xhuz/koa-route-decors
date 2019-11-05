@@ -1,8 +1,6 @@
 import 'reflect-metadata';
-import {RequestMethod, ControllerDesc, Constructor} from './interface';
+import {RequestMethod, Constructor} from './interface';
 import {METHOD_METADATA, PATH_METADATA} from './constants';
-
-export const controllers: ControllerDesc[] = [];
 
 export function Controller(path = '') {
   return function (target: Constructor): void {
