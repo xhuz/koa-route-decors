@@ -6,6 +6,18 @@
   npm install koa-route-decors
 ```
 
+### Developing
+
+* dependency injection
+
+### Update
+
+* 1.02
+fix 'this' in routing method
+
+
+
+
 ### Api
 
 decorators
@@ -59,7 +71,7 @@ start();
 async function start() {
   const app = new Koa();
   const router = new Router();
-  const subRouter = await autoRouter(controllerPath); // project root dir recursive all *.controller.ts file example: path.resolve(__dirname, './');
+  const subRouter = await autoRouter(controllerPath); // recursive all *.controller.ts in Given path example: path.resolve(__dirname, './');
   app.use(router.routes()).use(router.allowedMethods());
   app.listen(8080);
 }
@@ -67,9 +79,17 @@ async function start() {
 
 user.controller.ts
 
-@Controller('/user') // prefix route path
+/**
+ * @decorator
+ * @params {string} path - route prefix
+*/
+@Controller('/user')
 export class User {
-  @Get('/findUser') // if params null default function name
+  /**
+   * @decorator
+   * @params {string} path - route path, default method name 'findUser'
+  */
+  @Get('/findUser')
   async findUser(ctx: Context, next: Function) {  // final route path '/user/findUser'
     // ...
   }
