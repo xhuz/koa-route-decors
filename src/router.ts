@@ -55,8 +55,8 @@ export async function autoRouter(rootDir: string) {
 }
 
 function mapRoute(controller: Constructor) {
-
-  const prototype = Object.getPrototypeOf(new controller());
+  const instance = new controller();
+  const prototype = Object.getPrototypeOf(instance);
   const methodNames = Object.getOwnPropertyNames(prototype).filter(item => !(prototype[item] === prototype.constructor) && Utils.isFunction(prototype[item]));
   return methodNames.map(methodName => {
     const handle = prototype[methodName];
@@ -65,6 +65,6 @@ function mapRoute(controller: Constructor) {
     let url = Reflect.getMetadata(PATH_METADATA, handle);
     url = url ? url : `/${methodName}`;
     url = prefix + url;
-    return {url, method, handle, methodName};
+    return {url, method, handle: handle.bind(instance), methodName};
   });
 }
