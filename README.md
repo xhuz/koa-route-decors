@@ -8,9 +8,12 @@
 
 ### Developing
 
-* dependency injection
+* dependency injection (finished)
 
 ### Update
+
+* 1.03
+add dependency injection
 
 * 1.02
 fix 'this' in routing method
@@ -29,11 +32,16 @@ decorators
 * @Delete
 * @Options
 * @Patch
+* @Injectable
 
 init Router Function
 
 * initRouter
 * autoRouter
+
+### Example
+
+[huzz-koa-template](https://github.com/xhuz/huzz-koa-template)
 
 ### Usage
 
@@ -85,18 +93,31 @@ user.controller.ts
 */
 @Controller('/user')
 export class User {
+
+  constructor(private userService: UserService) {}
   /**
    * @decorator
    * @params {string} path - route path, default method name 'findUser'
   */
   @Get('/findUser')
   async findUser(ctx: Context, next: Function) {  // final route path '/user/findUser'
+    this.userService.findOne();
     // ...
   }
 
   @Post()
   async addUser() {  // '/user/addUser'
     // ...
+  }
+}
+
+user.service.ts
+
+@Injectable()
+export class UserService {
+  // ...
+  findOne() {
+    // pass
   }
 }
 
