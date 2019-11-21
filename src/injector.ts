@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import {Constructor} from './interface';
-import {Utils} from './utils';
 
 class Injector {
 
