@@ -39,4 +39,13 @@ export abstract class Utils {
     }
     return allFiles;
   }
+
+  static extractArgs(fn: Function) {
+    const args = fn.toString().match(/^[^\(]*\(\s*([^\)]*)\)/m);
+    if (args && args[1]) {
+      return args[1].split(',').map(a => a.trim());
+    } else {
+      return [];
+    }
+  }
 }

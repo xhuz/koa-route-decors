@@ -3,6 +3,7 @@ import {METHOD_METADATA, PATH_METADATA} from './constants';
 import * as Router from 'koa-router';
 import {Constructor} from './interface';
 import {Utils} from './utils';
+import {rootInjector} from './injector';
 
 export function initRouter(controller: Constructor) {
   const router = new Router();
@@ -41,10 +42,16 @@ export async function autoRouter(rootDir: string) {
   for (const controller of controllers) {
     const keys = Object.keys(controller);
     const controllerClass = keys.map(item => {
-      if (Utils.isFunction(controller[item]) && controller[item] === controller[item].prototype.constructor) {
+      if (
+        Utils.isFunction(controller[item])
+        && controller[item] === controller[item].prototype.constructor
+        && typeof Reflect.getMetadata(PATH_METADATA, controller[item]) === 'string'
+      ) {
         return controller[item];
+      } else {
+        return false;
       }
-    });
+    }).filter(item => item);
     controllerClass.forEach(item => {
       const subRouter = initRouter(item);
       router.use(subRouter.routes());
@@ -55,7 +62,7 @@ export async function autoRouter(rootDir: string) {
 }
 
 function mapRoute(controller: Constructor) {
-  const instance = new controller();
+  const instance = rootInjector.factory(controller);
   const prototype = Object.getPrototypeOf(instance);
   const methodNames = Object.getOwnPropertyNames(prototype).filter(item => !(prototype[item] === prototype.constructor) && Utils.isFunction(prototype[item]));
   return methodNames.map(methodName => {

@@ -1,10 +1,7 @@
-import {Injector} from './injector';
-import {Constructor} from './interface';
-
-export const rootInjector = new Injector();
+import {rootInjector} from './injector';
 
 export function Injectable() {
-  return function (target: Constructor) {
-    rootInjector.setProvider(target, target);
+  return function (target: any) {
+    rootInjector.inject(target);
   };
 }

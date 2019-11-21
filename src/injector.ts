@@ -1,33 +1,48 @@
 import 'reflect-metadata';
 import {Constructor} from './interface';
+import {Utils} from './utils';
 
-export class Injector {
+class Injector {
+
+  static injector: Injector;
   private readonly providerMap = new Map();
-  private readonly instanceMap = new Map();
 
-  setProvider(key: any, value: any) {
-    if (!this.providerMap.has(key)) {
-      this.providerMap.set(key, value);
+  private constructor() {}
+
+  static getInstance() {
+    if (!Injector.injector) {
+      Injector.injector = new Injector();
     }
+    return Injector.injector;
   }
 
-  getProvider(key: any) {
-    return this.providerMap.get(key);
-  }
-
-  setInstance(key: any, value: any) {
-    if (!this.instanceMap.has(key)) {
-      this.instanceMap.set(key, value);
+  inject(target: Constructor) {
+    const paramTypes = Reflect.getMetadata('design:paramtypes', target) || [];
+    if (this.providerMap.has(target)) return;
+    for (const p of paramTypes) {
+      if (p === target) {
+        throw new Error('can not depend self');
+      } else if (!this.providerMap.has(p)) {
+        throw new Error('dependency is not register');
+      }
     }
+    this.providerMap.set(target, target);
   }
 
-  getInstance(key: any) {
-    return this.instanceMap.get(key);
-  }
-
-  inject(target: Constructor, ...args: any[]) {
-    const dependencies = args.map(item => {
-
+  factory(target: Constructor) {
+    const paramTypes = Reflect.getMetadata('design:paramtypes', target) || [];
+    const dependencies = paramTypes.map((item: Constructor) => {
+      if (!this.providerMap.has(item)) {
+        throw new Error('dependency is not register');
+      } else if (item.length) {
+        return this.factory(item);
+      } else {
+        return new item();
+      }
     });
+    return new target(...dependencies);
   }
 }
+
+const rootInjector = Injector.getInstance();
+export {rootInjector};
