@@ -12,6 +12,9 @@
 
 ### Update
 
+* 1.05
+fix compilation of ts files into js files that could not load routing properly
+
 * 1.03
 add dependency injection
 
