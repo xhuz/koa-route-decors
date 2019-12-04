@@ -36,7 +36,7 @@ export function initRouter(controller: Constructor) {
 
 export async function autoRouter(rootDir: string) {
   const router = new Router();
-  const reg = /.+controller.ts$/;
+  const reg = /.+controller.[tj]s$/;
   const files = await Utils.getFile(rootDir);
   const controllers = files.filter(item => reg.test(item)).map(item => require(item));
   for (const controller of controllers) {
